@@ -12,8 +12,7 @@
     "@react-three/drei": "^9.88.0",
     "three": "^0.156.0",
     "zustand": "^4.4.0",
-    "@workspace/api-client-react": "*",
-    "@workspace/object-storage-web": "*",
+    "@tanstack/react-query": "^5.28.0",
     "clsx": "^2.0.0"
   },
   "devDependencies": {
