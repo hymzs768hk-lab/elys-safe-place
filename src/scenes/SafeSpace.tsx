@@ -8,7 +8,7 @@ import {
   useCreateDiaryPage,
   useUpdateDiaryPage,
   useDeleteDiaryPage,
-} from '@workspace/api-client-react'
+} from '../mocks/diaryApi'
 
 export default function SafeSpace() {
   const navigate = useNavigate()
@@ -31,9 +31,9 @@ export default function SafeSpace() {
       {diaryOpen && (
         <DiaryPanel
           pages={pages}
-          onCreate={createPage}
-          onUpdate={updatePage}
-          onDelete={deletePage}
+          onCreate={(data) => createPage.mutateAsync(data)}
+          onUpdate={(id, data) => updatePage.mutateAsync({ id, ...data })}
+          onDelete={(id) => deletePage.mutateAsync(id)}
           onClose={() => setDiaryOpen(false)}
         />
       )}

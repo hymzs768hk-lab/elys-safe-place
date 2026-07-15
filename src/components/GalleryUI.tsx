@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { useUpload } from '@workspace/object-storage-web'
+import { useUpload } from '../mocks/storageApi'
 
 interface GalleryPhoto {
   id: string
@@ -35,7 +35,7 @@ export default function GalleryUI({
       const result = await uploadFile(file)
       await onCreate({
         slotIndex,
-        imageObjectPath: result.objectPath,
+        imageObjectPath: (result as any).objectPath,
         caption: '',
       })
     } finally {
@@ -52,11 +52,6 @@ export default function GalleryUI({
     if (confirm('Delete this photo?')) {
       await onDelete(photo.id)
     }
-  }
-
-  const getImageUrl = (objectPath: string | null) => {
-    if (!objectPath) return ''
-    return `/api/storage/objects${objectPath.replace(/^\/objects/, '')}`
   }
 
   return (
@@ -123,7 +118,7 @@ export default function GalleryUI({
           >
             {photo.imageObjectPath && (
               <img
-                src={getImageUrl(photo.imageObjectPath)}
+                src={photo.imageObjectPath}
                 alt="Gallery"
                 style={{
                   width: '100%',

@@ -7,7 +7,7 @@ import {
   useCreateGalleryPhoto,
   useUpdateGalleryPhoto,
   useDeleteGalleryPhoto,
-} from '@workspace/api-client-react'
+} from '../mocks/galleryApi'
 
 export default function Gallery() {
   const navigate = useNavigate()
@@ -28,9 +28,9 @@ export default function Gallery() {
 
       <GalleryUI
         photos={photos}
-        onCreate={createPhoto}
-        onUpdate={updatePhoto}
-        onDelete={deletePhoto}
+        onCreate={(data) => createPhoto.mutateAsync(data)}
+        onUpdate={(id, data) => updatePhoto.mutateAsync({ id, ...data })}
+        onDelete={(id) => deletePhoto.mutateAsync(id)}
       />
 
       <button

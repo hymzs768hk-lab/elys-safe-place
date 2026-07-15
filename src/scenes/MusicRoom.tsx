@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Canvas3D from '../components/Canvas3D'
 import MusicRoomScene from '../models/MusicRoomScene'
 import CDPlayer from '../components/CDPlayer'
-import { useListCdSlots, useUpdateCdSlot } from '@workspace/api-client-react'
+import { useListCdSlots, useUpdateCdSlot } from '../mocks/musicApi'
 
 export default function MusicRoom() {
   const navigate = useNavigate()
@@ -25,7 +25,9 @@ export default function MusicRoom() {
         slots={cdSlots}
         selectedSlot={selectedCD}
         onSelectSlot={setSelectedCD}
-        onUpdateSlot={updateCdSlot}
+        onUpdateSlot={(slotNumber, data) =>
+          updateCdSlot.mutateAsync({ slotNumber, ...data })
+        }
       />
 
       <button

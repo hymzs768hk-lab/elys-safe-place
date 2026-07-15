@@ -1,1 +1,68 @@
-import { useQuery, useMutation } from '@tanstack/react-query'\n\n// Mock diary data\nconst mockDiaryPages = [\n  {\n    id: '1',\n    pageNumber: 1,\n    title: 'First Day',\n    content: 'Welcome to my safe place. This is where I keep my thoughts and memories.',\n    createdAt: new Date().toISOString(),\n    updatedAt: new Date().toISOString(),\n  },\n]\n\nlet diaryPages = [...mockDiaryPages]\n\nexport function useListDiaryPages() {\n  return useQuery({\n    queryKey: ['diaryPages'],\n    queryFn: async () => {\n      await new Promise((r) => setTimeout(r, 300))\n      return diaryPages\n    },\n  })\n}\n\nexport function useCreateDiaryPage() {\n  return useMutation({\n    mutationFn: async (data: any) => {\n      await new Promise((r) => setTimeout(r, 300))\n      const newPage = {\n        id: Date.now().toString(),\n        pageNumber: diaryPages.length + 1,\n        ...data,\n        createdAt: new Date().toISOString(),\n        updatedAt: new Date().toISOString(),\n      }\n      diaryPages.push(newPage)\n      return newPage\n    },\n  })\n}\n\nexport function useUpdateDiaryPage() {\n  return useMutation({\n    mutationFn: async ({ id, ...data }: any) => {\n      await new Promise((r) => setTimeout(r, 300))\n      const idx = diaryPages.findIndex((p) => p.id === id)\n      if (idx >= 0) {\n        diaryPages[idx] = {\n          ...diaryPages[idx],\n          ...data,\n          updatedAt: new Date().toISOString(),\n        }\n      }\n      return diaryPages[idx]\n    },\n  })\n}\n\nexport function useDeleteDiaryPage() {\n  return useMutation({\n    mutationFn: async (id: string) => {\n      await new Promise((r) => setTimeout(r, 300))\n      diaryPages = diaryPages.filter((p) => p.id !== id)\n      return true\n    },\n  })\n}\n\nexport function getListDiaryPagesQueryKey() {\n  return ['diaryPages']\n}\n
+// Mock diary data
+const mockDiaryPages = [
+  {
+    id: '1',
+    pageNumber: 1,
+    title: 'First Day',
+    content: 'Welcome to my safe place. This is where I keep my thoughts and memories.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+]
+
+let diaryPages = [...mockDiaryPages]
+
+export function useListDiaryPages() {
+  return {
+    data: diaryPages,
+    isLoading: false,
+  }
+}
+
+export function useCreateDiaryPage() {
+  return {
+    mutateAsync: async (data: any) => {
+      await new Promise((r) => setTimeout(r, 300))
+      const newPage = {
+        id: Date.now().toString(),
+        pageNumber: diaryPages.length + 1,
+        ...data,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+      diaryPages.push(newPage)
+      return newPage
+    },
+  }
+}
+
+export function useUpdateDiaryPage() {
+  return {
+    mutateAsync: async ({ id, ...data }: any) => {
+      await new Promise((r) => setTimeout(r, 300))
+      const idx = diaryPages.findIndex((p) => p.id === id)
+      if (idx >= 0) {
+        diaryPages[idx] = {
+          ...diaryPages[idx],
+          ...data,
+          updatedAt: new Date().toISOString(),
+        }
+      }
+      return diaryPages[idx]
+    },
+  }
+}
+
+export function useDeleteDiaryPage() {
+  return {
+    mutateAsync: async (id: string) => {
+      await new Promise((r) => setTimeout(r, 300))
+      diaryPages = diaryPages.filter((p) => p.id !== id)
+      return true
+    },
+  }
+}
+
+export function getListDiaryPagesQueryKey() {
+  return ['diaryPages']
+}

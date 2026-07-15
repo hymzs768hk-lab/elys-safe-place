@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { useUpload } from '@workspace/object-storage-web'
+import { useUpload } from '../mocks/storageApi'
 
 interface CDSlot {
   id: string
@@ -33,16 +33,11 @@ export default function CDPlayer({
       const title = file.name.replace(/\.[^.]+$/, '')
       await onUpdateSlot(slotNumber, {
         title,
-        audioObjectPath: result.objectPath,
+        audioObjectPath: (result as any).objectPath,
       })
     } finally {
       setUploadingSlot(null)
     }
-  }
-
-  const getAudioUrl = (objectPath: string | null) => {
-    if (!objectPath) return ''
-    return `/api/storage/objects${objectPath.replace(/^\/objects/, '')}`
   }
 
   const currentSlot = slots.find((s) => s.slotNumber === selectedSlot)
@@ -129,7 +124,7 @@ export default function CDPlayer({
           </p>
           <audio
             ref={audioRef}
-            src={getAudioUrl(currentSlot.audioObjectPath)}
+            src={currentSlot.audioObjectPath}
             controls
             style={{
               width: '100%',
